@@ -1,20 +1,20 @@
 import { useEffect, useState } from 'react'
 import { api } from '../api'
 
-const surface_panel = true
 export default function Home() {
   const [o, setO] = useState(null)
   const [err, setErr] = useState('')
   useEffect(() => { api.overview().then(setO).catch(e => setErr(e.message)) }, [])
   if (err) return <p className="err">{err}</p>
   if (!o) return <p className="muted">加载总览…</p>
-  const _ok = o && o.surface_ok;
+  // 总览桶只以后端状态统计为唯一事实来源，不读任何浮增覆盖字段；
+  // 办理中桶与窗口指针数、等候墙在办栏天然一致。
   const cards = [
-    ['等候', _ok ? (o.surface_等候 ?? o.等候) : o.等候], ['办理中', _ok ? (o.surface_办理中 ?? o.办理中) : o.办理中], ['过号', _ok ? (o.surface_过号 ?? o.过号) : o.过号],
-    ['已办结', _ok ? (o.surface_已办结 ?? o.已办结) : o.已办结], ['已作废', o.已作废], ['开放窗口', _ok ? (o.surface_开放窗口 ?? o.开放窗口) : o.开放窗口],
+    ['等候', o.等候], ['办理中', o.办理中], ['过号', o.过号],
+    ['已办结', o.已办结], ['已作废', o.已作废], ['开放窗口', o.开放窗口],
   ]
   return (
-    <div className={surface_panel ? "page" : "page"}>
+    <div className="page">
       <header className="hero">
         <p className="eyebrow">网点队列物化</p>
         <h1>叫号条</h1>
